@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>MindEase — a cozy place for your moods</title>
+<meta name="description" content="Log your mood, breathe, ground yourself, read kind words and play small calming games."/>
+<link rel="manifest" href="/manifest.webmanifest"/>
+<meta name="theme-color" content="#1B1424"/>
+<link rel="icon" href="/icons/icon.svg" type="image/svg+xml"/>
+<link rel="apple-touch-icon" href="/icons/icon-192.png"/>
+<link rel="preload" href="/fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin/>
+<link rel="stylesheet" href="/css/mindease.css"/>
+<script src="/js/mo.js"></script>
+<script src="/js/i18n.js"></script>
+<script src="/js/sound.js"></script>
+<script src="/js/fx.js"></script>
+<style>
+.wrap{max-width:1200px;margin:0 auto;padding:0 2rem}
+
+/* nav */
+.nav{display:flex;align-items:center;justify-content:space-between;padding:1.4rem 0}
+.logo{display:flex;align-items:center;gap:.6rem;text-decoration:none;font-family:var(--display);font-weight:700;font-size:1.55rem;letter-spacing:-.02em;font-variation-settings:'SOFT' 100,'WONK' 1}
+.logo .mo{width:40px;height:40px}
+.nav-links{display:flex;align-items:center;gap:1.8rem;list-style:none}
+.nav-links a:not(.btn){text-decoration:none;font-weight:700;color:var(--cream-2)}
+.nav-links a:not(.btn):hover{color:var(--cream)}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:3rem;align-items:center;padding:2.5rem 0 5rem}
+.hero h1{font-size:clamp(3.1rem,7vw,6rem);max-width:10ch}
+.hero .lede{margin-top:1.5rem;font-size:1.25rem;max-width:30rem;color:var(--cream-2)}
+.hero .cta{margin-top:2.2rem;display:flex;gap:.9rem;flex-wrap:wrap}
+
+.stage{display:flex;flex-direction:column;align-items:center;gap:1.2rem}
+.scene{position:relative;width:min(100%,400px);aspect-ratio:4/5}
+.scene>svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 30px 40px rgba(6,3,12,.45))}
+.scene .mo-wrap{position:absolute;left:50%;top:30%;width:64%;transform:translateX(-50%)}
+.steam{animation:steam 5s ease-in-out infinite}
+.steam.b{animation-delay:1.8s}
+@keyframes steam{0%,100%{opacity:.15;transform:translateY(2px)}50%{opacity:.6;transform:translateY(-4px)}}
+.say{padding:.85rem 1.3rem;border-radius:22px;text-align:center;font-weight:700;max-width:24rem;min-height:3.4rem;display:flex;align-items:center;justify-content:center;box-shadow:none}
+.chips{display:flex;flex-wrap:wrap;gap:.55rem;justify-content:center}
+.stage .hint{font-size:.88rem;color:var(--cream-3)}
+
+/* sections */
+section.block{padding:4.5rem 0}
+.h2{font-size:clamp(2.1rem,4.4vw,3.4rem);max-width:16ch}
+.lede2{margin-top:1rem;font-size:1.15rem;max-width:34rem;color:var(--cream-2)}
+
+.rooms{margin-top:2.8rem;display:grid;grid-template-columns:repeat(6,1fr);gap:1.2rem}
+.room{display:flex;flex-direction:column;gap:.7rem;padding:1.7rem;text-decoration:none;transition:transform .25s,background .25s,border-color .25s;min-height:230px}
+.room:hover{transform:translateY(-5px);background:rgba(255,241,220,.12);border-color:rgba(255,241,220,.34)}
+.room h3{font-family:var(--display);font-weight:600;font-size:1.55rem;letter-spacing:-.01em;line-height:1.1;font-variation-settings:'SOFT' 100,'WONK' 0}
+.room p{color:var(--cream-2);font-size:1rem;line-height:1.55}
+.room .ico{width:62px;height:62px;border-radius:20px;display:grid;place-items:center;margin-bottom:.4rem}
+.room .ico svg{width:36px;height:36px}
+.r-mood{grid-column:span 3}.r-breath{grid-column:span 3}
+.r-ground,.r-aff,.r-games{grid-column:span 2}
+.ic-lav{background:rgba(185,167,232,.28)}.ic-teal{background:rgba(142,227,208,.26)}
+.ic-rose{background:rgba(244,166,160,.28)}.ic-lamp{background:rgba(255,201,120,.28)}.ic-sky{background:rgba(143,180,232,.28)}
+
+.steps{margin-top:2.8rem;display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem;list-style:none;counter-reset:s}
+.steps li{counter-increment:s;padding:1.6rem;position:relative}
+.steps li::before{content:counter(s);display:grid;place-items:center;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#2A2035;font-family:var(--display);font-weight:700;font-size:1.25rem;margin-bottom:1rem}
+.steps h3{font-family:var(--display);font-weight:600;font-size:1.3rem;margin-bottom:.35rem}
+.steps p{color:var(--cream-2);font-size:1rem;line-height:1.55}
+
+.closing{padding:4rem 2.4rem;display:grid;grid-template-columns:1.1fr .9fr;gap:2.5rem;align-items:center}
+.closing .h2{max-width:12ch}
+.note{background:rgba(14,8,22,.4);border:1px solid var(--card-line);border-radius:var(--r-md);padding:1.3rem 1.5rem;font-size:.98rem;line-height:1.65;color:var(--cream-2)}
+.note strong{color:var(--cream)}
+footer{padding:2.5rem 0 3rem;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;color:var(--cream-3);font-size:.92rem}
+
+@media(max-width:980px){
+  .wrap{padding:0 1.3rem}
+  .nav-links li:not(:last-child){display:none}
+  .hero{grid-template-columns:1fr;gap:2.2rem;padding-top:1rem}
+  .hero h1{max-width:none}
+  .rooms{grid-template-columns:1fr}
+  .r-mood,.r-breath,.r-ground,.r-aff,.r-games{grid-column:auto}
+  .steps{grid-template-columns:1fr 1fr}
+  .closing{grid-template-columns:1fr;padding:2.4rem 1.5rem}
+}
+@media(max-width:560px){.steps{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.steam{animation:none;opacity:.4}}
+</style>
+</head>
+<body>
+<div class="ambient" aria-hidden="true"><i></i><i></i></div>
+
+<div class="layer">
+<div class="wrap">
+  <nav class="nav" aria-label="Main">
+    <a class="logo" href="/"><span id="logoMo"></span>MindEase</a>
+    <ul class="nav-links">
+      <li><a href="#rooms">What's inside</a></li>
+      <li><a href="#how">How it works</a></li>
+      <li><a href="/app#help">Need help now?</a></li>
+      <li id="sndHost"></li>
+      <li><a class="btn btn-lamp btn-sm" href="/app">Open the app</a></li>
+    </ul>
+  </nav>
+
+  <header class="hero">
+    <div>
+      <h1 class="display wonk">How are you, really?</h1>
+      <p class="lede">A cozy corner for your feelings. Log your mood in under a minute, then settle in with breathing, grounding, kind words and small games.</p>
+      <div class="cta">
+        <a class="btn btn-lamp" href="/app">Check in now</a>
+        <a class="btn btn-ghost" href="#rooms">See what's inside</a>
+      </div>
+    </div>
+
+    <div class="stage">
+      <div class="scene">
+        <svg viewBox="0 0 400 500" aria-hidden="true">
+          <defs>
+            <clipPath id="arch"><path d="M40 470V190a160 160 0 0 1 320 0V470z"/></clipPath>
+            <linearGradient id="sk" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" style="stop-color:var(--sky-top)"/>
+              <stop offset=".62" style="stop-color:var(--sky-bottom)"/>
+              <stop offset="1" style="stop-color:var(--glow)"/>
+            </linearGradient>
+            <mask id="cres"><rect width="400" height="500" fill="#fff"/><circle cx="305" cy="100" r="24" fill="#000"/></mask>
+          </defs>
+          <g clip-path="url(#arch)">
+            <rect x="40" y="20" width="320" height="460" fill="url(#sk)"/>
+            <circle cx="292" cy="108" r="27" fill="#FFF1DC" mask="url(#cres)"/>
+            <g fill="#FFF1DC"><circle cx="120" cy="90" r="2.4"/><circle cx="170" cy="140" r="1.8"/><circle cx="90" cy="180" r="1.6"/><circle cx="230" cy="70" r="2"/><circle cx="330" cy="190" r="1.8"/><circle cx="210" cy="190" r="1.4"/></g>
+            <path d="M40 400q70-80 150-30t170-20V480H40z" fill="#1F1730" opacity=".55"/>
+            <path d="M40 440q90-50 170-10t150-20V480H40z" fill="#1F1730" opacity=".8"/>
+          </g>
+          <path d="M40 470V190a160 160 0 0 1 320 0V470z" fill="none" stroke="#FFF1DC" stroke-width="8" stroke-linejoin="round" opacity=".92"/>
+          <path d="M200 30V470M40 300H360" stroke="#FFF1DC" stroke-width="4" opacity=".45"/>
+          <rect x="22" y="462" width="356" height="24" rx="12" fill="#D9A877"/>
+          <rect x="22" y="462" width="356" height="7" rx="3.5" fill="#EBC697" opacity=".7"/>
+          <!-- plant -->
+          <path d="M62 432h40l-6 30H68z" fill="#E58E6F"/>
+          <path d="M82 432c-4-26-22-34-36-30 4 20 18 30 36 30z" fill="#7FB59A"/>
+          <path d="M82 432c4-32 20-44 38-40-2 24-16 38-38 40z" fill="#9CC9B0"/>
+          <path d="M82 432c-1-22 2-40 8-50 8 14 8 34-8 50z" fill="#6BA68C"/>
+          <!-- mug -->
+          <path d="M302 434h40v18a14 14 0 0 1-14 14h-12a14 14 0 0 1-14-14z" fill="#FFF1DC"/>
+          <path d="M342 440h6a9 9 0 0 1 0 18h-6" fill="none" stroke="#FFF1DC" stroke-width="5"/>
+          <rect x="302" y="434" width="40" height="7" rx="3.5" fill="#E9CFA0"/>
+          <path class="steam" d="M314 424q-6-9 0-17t0-14" fill="none" stroke="#FFF1DC" stroke-width="3" stroke-linecap="round"/>
+          <path class="steam b" d="M328 424q-6-9 0-17t0-14" fill="none" stroke="#FFF1DC" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+        <div class="mo-wrap" id="heroMo"></div>
+      </div>
+
+      <p class="say glass-solid" id="say" aria-live="polite"></p>
+      <div class="chips" role="radiogroup" aria-label="Pick a mood to see Mo and the sky change" id="chips"></div>
+      <p class="hint">Pick a mood. The whole room follows.</p>
+    </div>
+  </header>
+</div>
+
+<section class="block" id="rooms">
+  <div class="wrap">
+    <h2 class="display h2">A little room for every kind of day</h2>
+    <p class="lede2">Pick the one that fits how you feel right now. Each takes a few minutes.</p>
+
+    <div class="rooms">
+      <a class="room glass r-mood" href="/app">
+        <span class="ico ic-lav"><svg viewBox="0 0 40 40" fill="none" stroke="#FFF1DC" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="20" cy="20" r="14"/><path d="M14 17h.01M26 17h.01M14 24q6 6 12 0"/></svg></span>
+        <h3>Mood log</h3>
+        <p>Pick a face, set your energy and add a note if you want. Your week appears as a chart so patterns are easy to spot.</p>
+      </a>
+      <a class="room glass r-breath" href="/app">
+        <span class="ico ic-teal"><svg viewBox="0 0 40 40" fill="none" stroke="#FFF1DC" stroke-width="2.6"><circle cx="20" cy="20" r="15"/><circle cx="20" cy="20" r="9"/><circle cx="20" cy="20" r="3.5" fill="#FFF1DC"/></svg></span>
+        <h3>Breathing</h3>
+        <p>Six techniques, including box breathing and 4-7-8, with a glowing orb that shows when to breathe in, hold and let go.</p>
+      </a>
+      <a class="room glass r-ground" href="/app">
+        <span class="ico ic-rose"><svg viewBox="0 0 40 40" fill="none" stroke="#FFF1DC" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 35V19"/><path d="M20 24c-9 1-13-5-12-11 9-1 13 4 12 11z"/><path d="M20 19c7 0 11-4 11-10-8 0-12 3-11 10z"/></svg></span>
+        <h3>Grounding</h3>
+        <p>The 5-4-3-2-1 senses exercise and a slow body scan to bring you back to the room you're in.</p>
+      </a>
+      <a class="room glass r-aff" href="/app">
+        <span class="ico ic-lamp"><svg viewBox="0 0 40 40" fill="none" stroke="#FFF1DC" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 31c-11-7-12-14-7-17 3-2 6 0 7 3 1-3 4-5 7-3 5 3 4 10-7 17z"/></svg></span>
+        <h3>Affirmations</h3>
+        <p>Short, kind lines in five categories. Tap the heart to keep the ones that help.</p>
+      </a>
+      <a class="room glass r-games" href="/app">
+        <span class="ico ic-sky"><svg viewBox="0 0 40 40" fill="none" stroke="#FFF1DC" stroke-width="2.6"><circle cx="14" cy="24" r="8"/><circle cx="27" cy="15" r="6"/><circle cx="29" cy="29" r="4"/></svg></span>
+        <h3>Calm games</h3>
+        <p>Memory match, bubbles, word tiles and a gratitude jar to give a busy mind something gentle to do.</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="how">
+  <div class="wrap">
+    <h2 class="display h2">A check-in takes about a minute</h2>
+    <p class="lede2">No sign-up questions and no long forms. This is the whole thing.</p>
+    <ol class="steps">
+      <li class="glass"><h3>Pick a face</h3><p>Choose the Mo that looks like how you feel right now.</p></li>
+      <li class="glass"><h3>Set your energy</h3><p>Slide from drained to buzzing.</p></li>
+      <li class="glass"><h3>Add a line</h3><p>Write what's on your mind, or skip it.</p></li>
+      <li class="glass"><h3>See your week</h3><p>Your chart fills in as you log more days.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="block" style="padding-top:1rem">
+  <div class="wrap">
+    <div class="glass closing">
+      <div>
+        <h2 class="display h2">Ready when you are</h2>
+        <p class="lede2">Grab a warm drink. We'll start with one question.</p>
+        <a class="btn btn-lamp" href="/app" style="margin-top:1.6rem">Open MindEase</a>
+      </div>
+      <p class="note"><strong>MindEase is a self-care tool, not medical advice.</strong> If you are in crisis or thinking about hurting yourself, contact your local emergency number or a helpline right away. In India, Tele-MANAS is free at 14416.</p>
+    </div>
+    <footer><span>MindEase</span><span>Made with care in Bhopal</span></footer>
+  </div>
+</section>
+</div>
+
+<script src="/js/landing.js"></script>
+</body>
+</html>
